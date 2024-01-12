@@ -20,5 +20,11 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Sync files to S3
-      run: aws s3 sync ./ s3://ahmed-nejira-srebrenica
+    - name: Sync files to S3 with versioning
+      run: |
+        # Generate a unique version ID (timestamp or commit SHA)
+        VERSION_ID=$(date +%s)
+
+        # Sync files to S3 with the version ID
+        aws s3 sync --delete ./ s3://ahmed-nejira-srebrenica/ --metadata-directive REPLACE --cache-control "max-age=0, no-cache, no-store" --acl public-read --version-id="$VERSION_ID"
+
