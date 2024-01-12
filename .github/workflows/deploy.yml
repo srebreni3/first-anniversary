@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3 # Use the latest version of actions/checkout
+      uses: actions/checkout@v3
 
     - name: Set up AWS CLI
       uses: aws-actions/configure-aws-credentials@v3
@@ -21,4 +21,4 @@ jobs:
         aws-region: us-east-1
 
     - name: Sync files to S3
-      run: aws s3 sync ./ s3://ahmed-nejira-srebrenica/ --delete --cache-control "max-age=0, no-cache, no-store" --acl public-read
+      run: aws s3 sync ./ s3://ahmed-nejira-srebrenica
