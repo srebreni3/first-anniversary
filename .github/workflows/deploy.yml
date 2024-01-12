@@ -26,5 +26,7 @@ jobs:
         VERSION_ID=$(date +%s)
 
         # Sync files to S3 with the version ID
-        aws s3 sync --delete ./ s3://ahmed-nejira-srebrenica/ --metadata-directive REPLACE --cache-control "max-age=0, no-cache, no-store" --acl public-read --version-id="$VERSION_ID"
+        aws s3 sync --delete ./ s3://ahmed-nejira-srebrenica/ --metadata-directive REPLACE --cache-control "max-age=0, no-cache, no-store" --acl public-read
 
+        # Update individual files with the version ID
+        find . -type f -exec aws s3 cp {} s3://ahmed-nejira-srebrenica/{} --metadata-directive REPLACE --cache-control "max-age=0, no-cache, no-store" --acl public-read --version-id="$VERSION_ID" \;
