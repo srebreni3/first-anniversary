@@ -11,22 +11,14 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
     - name: Set up AWS CLI
-      uses: aws-actions/configure-aws-credentials@v3
+      uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Sync files to S3 with versioning
-      run: |
-        # Generate a unique version ID (timestamp or commit SHA)
-        VERSION_ID=$(date +%s)
-
-        # Sync files to S3 with the version ID
-        aws s3 sync --delete ./ s3://ahmed-nejira-srebrenica/ --metadata-directive REPLACE --cache-control "max-age=0, no-cache, no-store" --acl public-read
-
-        # Update individual files with the version ID
-        find . -type f -exec aws s3 cp {} s3://ahmed-nejira-srebrenica/{} --metadata-directive REPLACE --cache-control "max-age=0, no-cache, no-store" --acl public-read --version-id="$VERSION_ID" \;
+    - name: Sync files to S3
+      run: aws s3 sync ./ s3://ahmed-nejira-srebrenica/ --delete --cache-control "max-age=0, no-cache, no-store" --acl public-read
